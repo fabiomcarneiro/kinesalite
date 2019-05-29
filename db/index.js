@@ -7,6 +7,8 @@ var crypto = require('crypto'),
     BigNumber = require('bignumber.js'),
     once = require('once')
 
+var dbInfo = false
+
 exports.create = create
 exports.lazy = lazyStream
 exports.clientError = clientError
@@ -21,6 +23,8 @@ exports.partitionKeyToHashKey = partitionKeyToHashKey
 exports.createShardIterator = createShardIterator
 exports.sumShards = sumShards
 exports.ITERATOR_PWD = 'kinesalite'
+exports.dbDetails = dbDetails
+
 
 function create(options) {
   options = options || {}
@@ -81,7 +85,7 @@ function create(options) {
     })
   }
 
-  return {
+  dbInfo = {
     createStreamMs: options.createStreamMs,
     deleteStreamMs: options.deleteStreamMs,
     updateStreamMs: options.updateStreamMs,
@@ -93,6 +97,8 @@ function create(options) {
     getStream: getStream,
     recreate: recreate,
   }
+
+  return dbInfo
 }
 
 function lazyStream(stream, errHandler) {
@@ -271,4 +277,9 @@ function sumShards(store, cb) {
       }).length
     })
     .sum(function(sum) { return cb(null, sum) })
+}
+
+
+function dbDetails() {
+  return dbInfo
 }

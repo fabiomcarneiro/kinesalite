@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-var argv = require('minimist')(process.argv.slice(2))
+var server = require('./server'),
+    argv = require('minimist')(process.argv.slice(2))
 
 if (argv.help) {
   return console.log([
@@ -26,7 +27,6 @@ if (argv.help) {
 // If we're PID 1, eg in a docker container, SIGINT won't end the process as usual
 if (process.pid == 1) process.on('SIGINT', process.exit)
 
-var server = require('./index.js')(argv).listen(argv.port || 4567, function() {
-  var address = server.address(), protocol = argv.ssl ? 'https' : 'http'
-  console.log('Listening at %s://%s:%s', protocol, address.address, address.port)
-})
+server.startServer(argv)
+
+
