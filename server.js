@@ -423,7 +423,7 @@ function actionDispatch(store, req, res, data, operation) {
     }else{
       executionAction = httpActions[action]
     }
-    executionAction(store, data, function(err) {
+    executionAction(store, data, function(err, data) {
       if (err && err.statusCode)
         return sendJson(req, res, err.body, err.statusCode)
       if (err) throw err
